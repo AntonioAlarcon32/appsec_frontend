@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Grid, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from './AxiosInstace.js'; 
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
@@ -10,18 +11,15 @@ const RegistrationForm = () => {
   });
 
   const navigate = useNavigate();
-
+  const [error, setError] = useState(''); // State to store error message
   const [emailError, setEmailError] = useState(false);
   
   const handleChange = (event) => {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
+    setFormData({ ...formData, [event.target.name]: event.target.value });
+    setError(''); // Clear general error message
 
-    // Validate email when the email field is changed
     if (event.target.name === 'email') {
-      setEmailError(!validateEmail(event.target.value));
+      setEmailError(!validateEmail(event.target.value)); // Validate email format
     }
   };
 
@@ -31,16 +29,41 @@ const RegistrationForm = () => {
     return re.test(String(email).toLowerCase());
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Check for email validation before proceeding with the form submission
-    if (!validateEmail(formData.email)) {
-      setEmailError(true);
-      return; // Stop the form submission if email is not valid
+    try {
+      const response = await axiosInstance.post('/user/register', formData);
+      console.log(response)
+      // Validate response (this depends on your backend's response structure)
+      if (response.data && response.status === 201) {
+        navigate('/');
+      } 
+
+      else {
+        // Handle invalid response
+        setError('Registration failed. Please try again.');
+      }
+    } catch (error) {
+      console.log(error.response.status)
+      // Handle different types of errors
+      if (error.response) {
+        // The server responded with a status code outside the 2xx range
+        if (error.response.status === 400) {
+          setError("User already in use, please login instead")
+        }
+        else {
+          setError(error.response.data.message || 'An error occurred on the server. Please try again');
+        }
+        
+      } else if (error.request) {
+        // The request was made but no response was received
+        setError('No response was received from the server.');
+      } else {
+        // Something else caused the error
+        setError('An error occurred during registration.');
+      }
+      console.error('Registration error:', error);
     }
-    // Handle the login logic here
-    console.log('Registering in with:', formData);
-    navigate("/")
   };
 
   return (
@@ -73,7 +96,7 @@ const RegistrationForm = () => {
                 value={formData.email}
                 onChange={handleChange}
                 error={emailError}
-                helperText={emailError ? "Please enter a valid email address" : ""}
+                helperText={emailError && "Please enter a valid email address"}
               />
             </Grid>
             <Grid item xs={12}>
@@ -89,6 +112,7 @@ const RegistrationForm = () => {
               />
             </Grid>
           </Grid>
+          {error && <Typography color="error">{error}</Typography>}
           <Button
             type="submit"
             fullWidth
