@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import RegistrationForm from './RegistrationForm'; // Adjust the path as necessary
-import LoginForm from './LoginForm';
+import RegistrationForm from './pages/RegistrationForm'; // Adjust the path as necessary
+import LoginForm from './pages/LoginForm';
 
 
 function App() {

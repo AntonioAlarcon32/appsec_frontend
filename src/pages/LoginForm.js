@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Grid, Box, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom'
-import GoogleButton from './GoogleButton';
+import GoogleButton from '../components/GoogleButton/GoogleButton.jsx';
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
