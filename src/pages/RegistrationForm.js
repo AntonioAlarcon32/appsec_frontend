@@ -24,7 +24,7 @@ const RegistrationForm = () => {
   };
 
   const validatePassword = (password) => {
-    // Define la expresión regular para la complejidad de la contraseña
+    // Password must contain at least one lowercase letter, one uppercase letter, one number, and one symbol, and be at least 8 characters. 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return passwordRegex.test(password);
   };

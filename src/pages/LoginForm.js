@@ -40,21 +40,21 @@ const LoginForm = () => {
         return; // Stop the form submission if email is not valid
       }
       try {
-        // Realizar la solicitud al backend para autenticar al usuario
+        // Request to the backend to authenticate the user
         const response = await axiosInstance.post('/user/login', formData);
     
-        // Validar la respuesta del backend
+        // Validate the backend response
         if (response.data && response.status === 200) {
-          // Autenticación exitosa, redirige o realiza las acciones necesarias
-          console.log('Usuario autenticado:', response.data);
+          // if succeded, navigate to the main page  
+          console.log('User authenticated:', response.data);
           navigate('/');
         } else {
-          // Manejar caso de autenticación fallida
-          console.error('Error en la autenticación:', response.data || 'No se recibió una respuesta válida del servidor.');
+          // Auth failed
+          console.error('Authentication error:', response.data || 'Did not get a valid response from the server.');
         }
       } catch (error) {
-        console.error('Error al realizar la solicitud de inicio de sesión:', error);
-        // Puedes manejar los errores específicos aquí, como mostrar un mensaje de error al usuario.
+        console.error('Error while making login request:', error);
+        
       }
     };
 
