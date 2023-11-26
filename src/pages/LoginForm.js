@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Grid, Box, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom'
 import GoogleButton from '../components/GoogleButton/GoogleButton.jsx';
+import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../services/AxiosInstace.js'; 
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
@@ -10,6 +12,7 @@ const LoginForm = () => {
     });
   
     const [emailError, setEmailError] = useState(false);
+    const navigate = useNavigate();
   
     const handleChange = (event) => {
       setFormData({
@@ -29,15 +32,30 @@ const LoginForm = () => {
       return re.test(String(email).toLowerCase());
     };
   
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       event.preventDefault();
       // Check for email validation before proceeding with the form submission
       if (!validateEmail(formData.email)) {
         setEmailError(true);
         return; // Stop the form submission if email is not valid
       }
-      // Handle the login logic here
-      console.log('Logging in with:', formData);
+      try {
+        // Realizar la solicitud al backend para autenticar al usuario
+        const response = await axiosInstance.post('/user/login', formData);
+    
+        // Validar la respuesta del backend
+        if (response.data && response.status === 200) {
+          // Autenticación exitosa, redirige o realiza las acciones necesarias
+          console.log('Usuario autenticado:', response.data);
+          navigate('/');
+        } else {
+          // Manejar caso de autenticación fallida
+          console.error('Error en la autenticación:', response.data || 'No se recibió una respuesta válida del servidor.');
+        }
+      } catch (error) {
+        console.error('Error al realizar la solicitud de inicio de sesión:', error);
+        // Puedes manejar los errores específicos aquí, como mostrar un mensaje de error al usuario.
+      }
     };
 
   return (

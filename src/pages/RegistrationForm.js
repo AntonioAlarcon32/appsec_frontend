@@ -23,6 +23,12 @@ const RegistrationForm = () => {
     }
   };
 
+  const validatePassword = (password) => {
+    // Define la expresión regular para la complejidad de la contraseña
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
   const validateEmail = (email) => {
     // Simple email validation pattern
     const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -31,6 +37,13 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+     //validate password before sending request to server
+     if (!validatePassword(formData.password)) {
+      setError('The password must contain at least one lowercase letter, one uppercase letter, one number, and one symbol, and be at least 8 characters.');
+      return;
+    }
+
     try {
       const response = await axiosInstance.post('/user/register', formData);
       console.log(response)
