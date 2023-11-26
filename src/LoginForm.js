@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Grid, Box, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom'
+import GoogleButton from './GoogleButton';
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
@@ -92,6 +93,10 @@ const LoginForm = () => {
           </Grid>
         </Box>
       </Box>
+      <Box sx={{ my: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <GoogleButton />
+      </Box>
+
     </Container>
   );
 };
