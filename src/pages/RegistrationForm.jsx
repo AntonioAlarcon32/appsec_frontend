@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Grid, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../services/AxiosInstace.js'; 
+import axiosInstance from '../services/AxiosInstance.js'; 
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({

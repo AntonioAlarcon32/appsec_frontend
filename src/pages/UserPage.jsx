@@ -1,33 +1,27 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { setAuthToken } from '../services/AxiosInstace.js';
-import axiosInstance from '../services/AxiosInstace.js'; 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { setAuthToken } from '../services/AxiosInstance.js';
+import axiosInstance from '../services/AxiosInstance.js'; 
 import { useAuth } from '../AuthContext.jsx';
+import { Button, Typography, Container } from '@mui/material';
 
 const UserPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    // Function to parse query params
+    const { isLoggedIn, isLoading, login } = useAuth();
+
     const useQuery = () => {
         return new URLSearchParams(location.search);
     };
 
-    const { isLoggedIn, isLoading, login } = useAuth();
-
     const query = useQuery();
     const token = query.get('token');
 
-    const handleButtonClick = () => {
-        axiosInstance.get('/hello/hello')
-            .then(response => {
-                console.log('Response:', response.data);
-                // Handle your response here
-            })
-            .catch(error => {
-                console.error('There was an error!', error);
-            });
+    const handleFilecenterButtonClick = () => {
+        // Navigate to the Filecenter page
+        navigate('/files'); 
     };
+
 
     useEffect(() => {
         console.log('UserPage useEffect');
@@ -54,10 +48,10 @@ const UserPage = () => {
             console.log('UserPage useEffect: no token and not logged in');
             navigate('/login');
         }
-    },[token, isLoggedIn, isLoading, login, navigate]);
+    }, [token, isLoggedIn, isLoading, login, navigate]);
 
     if (isLoading) {
-        return <div>Loading...</div>; // Or any other loading indicator
+        return <Typography>Loading...</Typography>;
     }
 
     if (!isLoggedIn) {
@@ -66,13 +60,18 @@ const UserPage = () => {
     }
 
     return (
-        <div>
-            <h1>Welcome to the User Page!</h1>
-            <p>This is the main welcome page for the user.</p>
-            <button onClick={handleButtonClick}>Call Endpoint</button>
-        </div>
+        <Container maxWidth="sm" sx={{ bgcolor: 'background.default', py: 5, height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Typography component="h1" variant="h4" gutterBottom>
+                Welcome to the User Page!
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 3 }}>
+                This is the main welcome page for the user.
+            </Typography>
+            <Button variant="contained" color="primary" onClick={handleFilecenterButtonClick}>
+                Go to Filecenter
+            </Button>
+        </Container>
     );
 };
-
 
 export default UserPage;

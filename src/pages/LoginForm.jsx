@@ -3,7 +3,7 @@ import { Card, TextField, Button, Container, Typography, Grid, Box, Link } from 
 import { Link as RouterLink } from 'react-router-dom';
 import GoogleButton from '../components/GoogleButton/GoogleButton.jsx';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance, { setAuthToken } from '../services/AxiosInstace.js'; 
+import axiosInstance, { setAuthToken } from '../services/AxiosInstance.js'; 
 import { useAuth } from '../AuthContext.jsx';
 
 const LoginForm = () => {
