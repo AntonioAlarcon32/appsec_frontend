@@ -13,6 +13,7 @@ const RegistrationForm = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(''); // State to store error message
   const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -21,23 +22,28 @@ const RegistrationForm = () => {
     if (event.target.name === 'email') {
       setEmailError(!validateEmail(event.target.value)); // Validate email format
     }
+    if (event.target.name === 'password') {
+      setPasswordError(!validatePassword(event.target.value)); // Validate email format
+    }
+
   };
 
   const validatePassword = (password) => {
     // Password must contain at least one lowercase letter, one uppercase letter, one number, and one symbol, and be at least 8 characters. 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/;
+    console.log(passwordRegex.test(password))
     return passwordRegex.test(password);
   };
 
   const validateEmail = (email) => {
     // Simple email validation pattern
     const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    console.log(re.test(String(email).toLowerCase()))
     return re.test(String(email).toLowerCase());
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
      //validate password before sending request to server
      if (!validatePassword(formData.password)) {
       setError('The password must contain at least one lowercase letter, one uppercase letter, one number, and one symbol, and be at least 8 characters.');
@@ -122,6 +128,8 @@ const RegistrationForm = () => {
                 autoComplete="current-password"
                 value={formData.password}
                 onChange={handleChange}
+                error={passwordError}
+                helperText={passwordError && 'The password must contain at least one lowercase letter, one uppercase letter, one number, and one symbol, and be at least 8 characters.'}
               />
             </Grid>
           </Grid>

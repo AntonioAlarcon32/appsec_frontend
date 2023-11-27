@@ -3,7 +3,9 @@ import { TextField, Button, Container, Typography, Grid, Box, Link } from '@mui/
 import { Link as RouterLink } from 'react-router-dom'
 import GoogleButton from '../components/GoogleButton/GoogleButton.jsx';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../services/AxiosInstace.js'; 
+import axiosInstance from '../services/AxiosInstace.js';
+import {setAuthToken} from '../services/AxiosInstace.js'; 
+import { useAuth } from '../AuthContext.jsx';
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
@@ -13,6 +15,7 @@ const LoginForm = () => {
   
     const [emailError, setEmailError] = useState(false);
     const navigate = useNavigate();
+    const { isLoggedIn, login } = useAuth();
   
     const handleChange = (event) => {
       setFormData({
@@ -41,13 +44,15 @@ const LoginForm = () => {
       }
       try {
         // Request to the backend to authenticate the user
-        const response = await axiosInstance.post('/user/login', formData);
+        const response = await axiosInstance.post('/auth/login', formData);
     
         // Validate the backend response
         if (response.data && response.status === 200) {
           // if succeded, navigate to the main page  
           console.log('User authenticated:', response.data);
-          navigate('/');
+          setAuthToken(response.data.token);
+          login();
+          navigate('/menu');
         } else {
           // Auth failed
           console.error('Authentication error:', response.data || 'Did not get a valid response from the server.');
