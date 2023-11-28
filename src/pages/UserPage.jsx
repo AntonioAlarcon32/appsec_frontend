@@ -8,7 +8,7 @@ import { Button, Typography, Container } from '@mui/material';
 const UserPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { isLoggedIn, isLoading, login } = useAuth();
+    const { isLoggedIn, isLoading, login, logout } = useAuth();
 
     const useQuery = () => {
         return new URLSearchParams(location.search);
@@ -21,6 +21,20 @@ const UserPage = () => {
         // Navigate to the Filecenter page
         navigate('/files'); 
     };
+
+    const handleLogoutClick = () => {
+        // Logout the user
+        setAuthToken(null);
+        axiosInstance.post('/auth/logout')
+        .then(response => {
+            console.log('Response:', response.data);
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+        });
+        logout();
+        navigate('/login');
+    }
 
 
     useEffect(() => {
@@ -69,6 +83,9 @@ const UserPage = () => {
             </Typography>
             <Button variant="contained" color="primary" onClick={handleFilecenterButtonClick}>
                 Go to Filecenter
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleLogoutClick}>
+                Logout
             </Button>
         </Container>
     );
