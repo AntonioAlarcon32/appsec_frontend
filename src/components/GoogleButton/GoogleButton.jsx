@@ -3,7 +3,7 @@ import { ReactComponent as GoogleLogo } from './oauth_google.svg';
 
 const GoogleButton = () => {
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:3500/auth/google';
+    window.location.href = 'https://api.filecrypt.com/auth/google';
   };
 
   return (

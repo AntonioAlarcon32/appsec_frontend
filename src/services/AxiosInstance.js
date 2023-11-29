@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an Axios instance with default properties
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3500', // Replace with your API's base URL
+  baseURL: 'https://api.filecrypt.com', // Replace with your API's base URL
   // You can add more default settings here
 });
 
