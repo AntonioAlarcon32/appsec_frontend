@@ -8,12 +8,14 @@ const RegistrationForm = () => {
     username: '',
     email: '',
     password: '',
+    confirmPassword: '', // Add confirm password field
   });
 
   const navigate = useNavigate();
-  const [error, setError] = useState(''); // State to store error message
+  const [error, setError] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+
   
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -44,6 +46,13 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+       // Validate confirm password
+       if (formData.password !== formData.confirmPassword) {
+        setError('Passwords do not match.');
+        return;
+      }
+
      //validate password before sending request to server
      if (!validatePassword(formData.password)) {
       setError('The password must contain at least one lowercase letter, one uppercase letter, one number, and one symbol, and be at least 8 characters.');
@@ -132,6 +141,20 @@ const RegistrationForm = () => {
                 helperText={passwordError && 'The password must contain at least one lowercase letter, one uppercase letter, one number, and one symbol, and be at least 8 characters.'}
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                autoComplete="confirm-password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                error={passwordError && formData.password !== formData.confirmPassword}
+                helperText={passwordError && formData.password !== formData.confirmPassword && 'Passwords do not match.'}
+              />
+          </Grid>
           </Grid>
           {error && <Typography color="error">{error}</Typography>}
           <Button
