@@ -57,11 +57,38 @@ const FileCenter = () => {
     setSelectedFile(event.target.files[0]);
   };
 
+  const allowedFileExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'txt'];
+  const allowedFileTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'text/plain'];
+  
   const handleUpload = () => {
     if (!selectedFile) {
       alert('Please select a file first!');
       return;
     }
+
+    // Validate MIME type
+    const fileMimeType = selectedFile.type;
+ 
+    if (!allowedFileTypes.includes(fileMimeType)) {
+      alert('Invalid file type. Please upload a PDF, JPG, JPEG, PNG, TXT, or GIF file.');
+      return;
+    }
+
+    // Validate file extension
+    const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
+
+    if (!allowedFileExtensions.includes(fileExtension)) {
+      alert('Invalid file extension. Please upload a file with PDF, JPG, JPEG, PNG, or GIF extension.');
+      return;
+    }
+
+    // Validate file size
+    const maxFileSize = 10 * 1024 * 1024; // 10 MB
+    if (selectedFile.size > maxFileSize) {
+      alert('File size exceeds the maximum limit (10 MB). Please choose a smaller file.');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('file', selectedFile);
     axiosInstance.post('/files/upload', formData, {
